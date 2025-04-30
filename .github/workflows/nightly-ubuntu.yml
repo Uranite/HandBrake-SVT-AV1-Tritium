@@ -1,6 +1,9 @@
 name: Ubuntu Build
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
   schedule:
     - cron:  '30 7 * * 1,5'
@@ -9,7 +12,7 @@ on:
 jobs:
   build:
     name: Build on Ubuntu
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
     - uses: actions/checkout@v4
 
@@ -48,7 +51,7 @@ jobs:
     - name: Build HandBrake Linux
       run: |
         cd HandBrake
-        ./configure --lto=on --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --launch-jobs=0 --launch
+        ./configure --lto=on --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-libdovi --launch-jobs=0 --launch
         mv build/HandBrakeCLI ../HandBrakeCLI-$(date +'%Y%m%d')-master-x86_64
         mv build/gtk/src/ghb ../ghb-$(date +'%Y%m%d')-master-x86_64
 

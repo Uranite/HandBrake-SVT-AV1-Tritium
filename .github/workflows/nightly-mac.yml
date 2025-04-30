@@ -1,6 +1,9 @@
 name: macOS build
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
   schedule:
     - cron:  '30 7 * * 1,5'
@@ -9,9 +12,7 @@ on:
 jobs:
   build:
     name: Build on macOS
-    runs-on: macos-latest
-    env:
-      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+    runs-on: macos-26
     steps:
     - uses: actions/checkout@v5
     - uses: actions/setup-python@v6
@@ -44,6 +45,7 @@ jobs:
       run: |
         echo ~/mac-toolchain/bin >> $GITHUB_PATH
         rustup target add x86_64-apple-darwin
+        xcodebuild -downloadComponent MetalToolchain
 
     - name: Setup Toolchain
       if: steps.mac-toolchain.outputs.cache-hit != 'true'
@@ -59,7 +61,7 @@ jobs:
     - name: Build HandBrake
       run: |
         cd HandBrake
-        ./configure
+        ./configure --enable-libdovi
         cd build
         make ub && make pkg.create
 
