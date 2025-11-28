@@ -96,7 +96,7 @@ jobs:
          nuget restore HandBrake.sln
 
     - name: Download LibHandBrake ARM 64
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
        name: LibHandBrake_ARM64
        path: HandBrake/win/CS/HandBrakeWPF/bin/publish
@@ -236,7 +236,7 @@ jobs:
          nuget restore HandBrake.sln
 
     - name: Download LibHandBrake
-      uses: actions/download-artifact@v5
+      uses: actions/download-artifact@v6
       with:
        name: LibHandBrake
        path: HandBrake/win/CS/HandBrakeWPF/bin/publish
@@ -288,43 +288,45 @@ jobs:
     runs-on: ubuntu-latest
     needs: [build_gui_x64, build_gui_arm64]
     if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    permissions:
+      contents: write
     steps:
       - uses: actions/checkout@v5
        
       # X64 Devices
       - name: Download Artifacts - CLI x64
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrakeCLI
           path: win/
                    
       - name: Download Artifacts - GUI x64 EXE
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrake-x86_64-WinExe
           path: win/
        
       - name: Download Artifacts - GUI x64 Portable
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrake-x86_64-WinPortable
           path: win/
       
       # ARM DEVICES
       - name: Download Artifacts - CLI ARM64
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrakeCLI_ARM64
           path: win/
           
       - name: Download Artifacts - GUI ARM64 EXE
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrake-arm64-WinExe
           path: win/
 
       - name: Download Artifacts - GUI ARM64 Portable
-        uses: actions/download-artifact@v5
+        uses: actions/download-artifact@v6
         with:
           name: HandBrake-arm64-WinPortable
           path: win/
