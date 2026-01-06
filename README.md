@@ -2,7 +2,7 @@
 ### Purpose of the project
 This project contains the patches needed to replace SVT-AV1 with SVT-AV1-Tritium inside HandBrake.\
 SVT-AV1-Tritium is a fork of SVT-AV1-HDR that incorporates features from other forks, such as SVT-AV1-PSYEX and SVT-AV1-Essential. Most notably, SVT-AV1-Tritium includes scene detection and auto-tiling from SVT-AV1-Essential.\
-Scene detection and auto-tiling are enabled by default, other than that, the defaults settings are the same as SVT-AV1-HDR.\
+Scene detection and auto-tiling are enabled by default, other than that, the default settings are the same as SVT-AV1-HDR.\
 In addition, using GitHub Actions, nightly build of patched executables will be released.
 ### Instructions to patch/build
 * Run ```patch.sh``` on linux. The script will patch the previously cloned HandBrake repo. If you want to also clone it you can use ```--clone``` argument.
