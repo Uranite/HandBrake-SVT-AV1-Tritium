@@ -1,6 +1,9 @@
 name: Flatpak Build
 
 on:
+  push:
+    branches:
+      - main
   pull_request:
   schedule:
     - cron:  '30 7 * * 1,5'
