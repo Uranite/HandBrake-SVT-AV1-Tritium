@@ -4,8 +4,8 @@
 # Contributor: Sebastien Piccand <sebcactus gmail com>
 
 pkgname=(
-  'handbrake-svt-av1-hdr-llvm-optimized'
-  'handbrake-svt-av1-hdr-llvm-optimized-cli'
+  'handbrake-svt-av1-tritium-llvm-optimized'
+  'handbrake-svt-av1-tritium-llvm-optimized-cli'
 )
 
 pkgver=1.10.2
@@ -70,7 +70,7 @@ makedepends=(
   "${_guideps[@]}"
 )
 options=('!lto') # https://bugs.archlinux.org/task/72600
-source=("HandBrake::git+https://github.com/HandBrake/HandBrake.git" "HandBrake-SVT-AV1-HDR::git+https://github.com/Uranite/HandBrake-SVT-AV1-HDR.git")
+source=("HandBrake::git+https://github.com/HandBrake/HandBrake.git" "HandBrake-SVT-AV1-Tritium::git+https://github.com/Uranite/HandBrake-SVT-AV1-Tritium.git")
 sha256sums=('SKIP' 'SKIP')
 
 pkgver() {
@@ -97,7 +97,7 @@ setup_compiler() {
 }
 
 build() {
-  ./HandBrake-SVT-AV1-HDR/patch.sh
+  ./HandBrake-SVT-AV1-Tritium/patch.sh
   setup_compiler
 
   local -a CONFIGURE_OPTIONS=(
@@ -119,7 +119,7 @@ build() {
   make -C build
 }
 
-package_handbrake-svt-av1-hdr-llvm-optimized() {
+package_handbrake-svt-av1-tritium-llvm-optimized() {
   pkgdesc="Multithreaded video transcoder optimized with LLVM"
   depends=(
     'desktop-file-utils'
@@ -144,7 +144,7 @@ package_handbrake-svt-av1-hdr-llvm-optimized() {
   rm "${pkgdir}/usr/bin/HandBrakeCLI"
 }
 
-package_handbrake-svt-av1-hdr-llvm-optimized-cli() {
+package_handbrake-svt-av1-tritium-llvm-optimized-cli() {
   pkgdesc="Multithreaded video transcoder optimized with LLVM (CLI)"
   depends=("${_commondeps[@]}")
   optdepends=(
