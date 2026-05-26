@@ -10,7 +10,7 @@ index 992313921..d01b1176c 100644
 -SVT-AV1.FETCH.url    += https://gitlab.com/AOMediaCodec/SVT-AV1/-/archive/v4.1.0/SVT-AV1-v4.1.0.tar.gz
 -SVT-AV1.FETCH.sha256  = 6c4c0c44ff0ba3d136d6f57f3a707f9de8e9c866f50f809c1d22a43f0d8c9583
 +SVT-AV1.FETCH.url     = https://github.com/Uranite/HandBrake-SVT-AV1-Tritium/releases/download/contribs/svt-av1-tritium.tar.gz
-+SVT-AV1.FETCH.sha256  = b0f9bcaf205a531ef47077ed701d664f52b2e544e9939860a8efc01dfbb406e2
++SVT-AV1.FETCH.sha256  = 6c358480595ce2547a24c2a5f9d07e610991f02347386468a32905cd73cf7a84
  
  SVT-AV1.GCC.args.c_std =
  
