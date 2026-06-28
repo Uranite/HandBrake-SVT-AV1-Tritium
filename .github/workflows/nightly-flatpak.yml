@@ -17,7 +17,7 @@ jobs:
     - uses: actions/checkout@v6
 
     - name: Rust Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/registry
@@ -34,7 +34,7 @@ jobs:
 
     - name: Cargo-C Toolchain Cache
       id: linux-cargo-c-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -43,7 +43,7 @@ jobs:
         key: linux-cargo-c-toolchain-${{ env.CARGOC_VERSION }}
 
     - name: Setup Environment Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ./apt-cache
@@ -98,7 +98,7 @@ jobs:
         ./configure --launch-jobs=0 --flatpak --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-libdovi
 
     - name: Flatpak Ccache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           HandBrake/build/.flatpak-builder/ccache
