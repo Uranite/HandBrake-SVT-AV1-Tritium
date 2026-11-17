@@ -13,6 +13,12 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CCACHE_MAXSIZE: 1500M
+  CCACHE_COMPRESS: "true"
+  CCACHE_COMPILERCHECK: content
+  CCACHE_SLOPPINESS: time_macros,include_file_mtime,include_file_ctime
+
 jobs:
   build:
     name: Build on Ubuntu
@@ -20,13 +26,16 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
+    - name: Cache week
+      run: echo "WEEK=$(date -u +%G-W%V)" >> "$GITHUB_ENV"
+
     - name: Rust Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/registry
           ~/.cargo/git
-        key: ${{ runner.os }}-cargo-${{ github.run_id }}
+        key: ${{ runner.os }}-cargo-${{ env.WEEK }}
         restore-keys: |
           ${{ runner.os }}-cargo-
 
@@ -38,7 +47,7 @@ jobs:
 
     - name: Cargo-C Toolchain Cache
       id: linux-cargo-c-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -60,39 +69,40 @@ jobs:
 
         wget https://apt.llvm.org/llvm.sh
         chmod +x llvm.sh
-        sudo ./llvm.sh 22 all
+        sudo ./llvm.sh 23 all
         
         mkdir -p $HOME/llvm-overrides
         
-        ln -sf $(which llvm-ar-22) $HOME/llvm-overrides/ar
-        ln -sf $(which llvm-nm-22) $HOME/llvm-overrides/nm
-        ln -sf $(which llvm-ranlib-22) $HOME/llvm-overrides/ranlib
+        ln -sf $(which llvm-ar-23) $HOME/llvm-overrides/ar
+        ln -sf $(which llvm-nm-23) $HOME/llvm-overrides/nm
+        ln -sf $(which llvm-ranlib-23) $HOME/llvm-overrides/ranlib
         
-        ln -sf $(which lld-22) $HOME/llvm-overrides/ld
+        ln -sf $(which lld-23) $HOME/llvm-overrides/ld
 
         echo "PATH=$HOME/llvm-overrides:$PATH" >> $GITHUB_ENV
 
         mkdir -p $HOME/ccache_bin
-        ln -s $(which ccache) $HOME/ccache_bin/clang-22
-        ln -s $(which ccache) $HOME/ccache_bin/clang++-22
+        ln -s $(which ccache) $HOME/ccache_bin/clang-23
+        ln -s $(which ccache) $HOME/ccache_bin/clang++-23
         
         echo "PATH=$HOME/ccache_bin:$HOME/llvm-overrides:$PATH" >> $GITHUB_ENV
         
         echo "CCACHE_DIR=$HOME/.ccache" >> $GITHUB_ENV
-        echo "CC=clang-22" >> $GITHUB_ENV
-        echo "CXX=clang++-22" >> $GITHUB_ENV
+        echo "CC=clang-23" >> $GITHUB_ENV
+        echo "CXX=clang++-23" >> $GITHUB_ENV
         
-        echo "AR=llvm-ar-22" >> $GITHUB_ENV
-        echo "NM=llvm-nm-22" >> $GITHUB_ENV
-        echo "RANLIB=llvm-ranlib-22" >> $GITHUB_ENV
-        echo "LDFLAGS=-fuse-ld=lld-22" >> $GITHUB_ENV
+        echo "AR=llvm-ar-23" >> $GITHUB_ENV
+        echo "NM=llvm-nm-23" >> $GITHUB_ENV
+        echo "RANLIB=llvm-ranlib-23" >> $GITHUB_ENV
+        echo "LDFLAGS=-fuse-ld=lld-23" >> $GITHUB_ENV
 
     - name: Compiler Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ~/.ccache
-        key: ${{ runner.os }}-ccache-${{ github.run_id }}
+        key: ${{ runner.os }}-ccache-llvm23-${{ env.WEEK }}
         restore-keys: |
+          ${{ runner.os }}-ccache-llvm23-
           ${{ runner.os }}-ccache-
 
     - name: Setup Cargo-C Toolchain
@@ -107,6 +117,7 @@ jobs:
 
     - name: Build HandBrake Linux
       run: |
+        ccache -z
         cd HandBrake
         ./configure --lto=on --enable-qsv --enable-vce --enable-nvenc --enable-nvdec --enable-libdovi --launch-jobs=0 --launch
         mv build/HandBrakeCLI ../HandBrakeCLI-$(date +'%Y%m%d')-master-x86_64

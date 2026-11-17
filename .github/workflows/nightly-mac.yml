@@ -13,31 +13,39 @@ concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  CCACHE_MAXSIZE: 1500M
+  CCACHE_COMPRESS: "true"
+  CCACHE_SLOPPINESS: time_macros,include_file_mtime,include_file_ctime
+
 jobs:
   build:
     name: Build on macOS
     runs-on: macos-26
     steps:
     - uses: actions/checkout@v7
-    - uses: actions/setup-python@v6
+    - uses: actions/setup-python@v7
       with:
-        python-version: '3.14.2'
+        python-version: '3.14.10'
         cache: 'pip'
         cache-dependency-path: '.github/workflows/nightly-mac.yml'
 
+    - name: Cache week
+      run: echo "WEEK=$(date -u +%G-W%V)" >> "$GITHUB_ENV"
+
     - name: Rust Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/registry
           ~/.cargo/git
-        key: ${{ runner.os }}-cargo-${{ github.run_id }}
+        key: ${{ runner.os }}-cargo-${{ env.WEEK }}
         restore-keys: |
           ${{ runner.os }}-cargo-
 
     - name: Toolchain Cache
       id: mac-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ~/mac-toolchain
         key: ${{ runner.os }}-${{ runner.arch }}-toolchain
@@ -50,7 +58,7 @@ jobs:
 
     - name: Cargo-C Toolchain Cache
       id: mac-cargo-c-toolchain
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: |
           ~/.cargo/bin/cargo-capi
@@ -73,10 +81,10 @@ jobs:
         echo "PATH=$(brew --prefix ccache)/libexec:$PATH" >> $GITHUB_ENV
 
     - name: Compiler Cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: /Users/runner/Library/Caches/ccache
-        key: ${{ runner.os }}-ccache-${{ github.run_id }}
+        key: ${{ runner.os }}-ccache-${{ env.WEEK }}
         restore-keys: |
           ${{ runner.os }}-ccache-
 
@@ -93,6 +101,7 @@ jobs:
 
     - name: Build HandBrake
       run: |
+        ccache -z
         cd HandBrake
         ./configure --enable-libdovi
         cd build
