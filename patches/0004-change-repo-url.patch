@@ -8,8 +8,8 @@ diff --git a/contrib/svt-av1/module.defs b/contrib/svt-av1/module.defs
 -SVT-AV1.FETCH.url     = https://github.com/HandBrake/HandBrake-contribs/releases/download/contribs2/SVT-AV1-4.3.1.tar.gz
 -SVT-AV1.FETCH.url    += https://github.com/AOMediaCodec/SVT-AV1/archive/refs/tags/v4.3.1.tar.gz
 -SVT-AV1.FETCH.sha256  = ad94f481cb74821af183f37f4533fc52324b76ffbd98ec7723e282bab0cf9fc4
-+SVT-AV1.FETCH.url      = https://github.com/Uranite/HandBrake-SVT-AV1-Tritium/releases/download/contribs/svt-av1-tritium-c3df92620f1f.tar.gz
-+SVT-AV1.FETCH.sha256   = 1314ef857afcbf775e26ed3adc0934b6be967b9509df81cadac0cb8dc416510c
++SVT-AV1.FETCH.url      = https://github.com/Uranite/HandBrake-SVT-AV1-Tritium/releases/download/contribs/svt-av1-tritium-bbd8e0ab2993.tar.gz
++SVT-AV1.FETCH.sha256   = 3125a173ada925b224e91e33d1b01ecc02c241aea0e297556edbfbfa90b79d64
  
  SVT-AV1.GCC.args.c_std =
  
